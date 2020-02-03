@@ -252,6 +252,8 @@ class DefaultConfig(object):
     # Where to logger should send the emails to
     ADMINS = ["admin@example.org"]
 
+    NOTIFICATION_COUNTDOWN = 86400 # 24 hours
+
     # Redis
     # ------------------------------ #
     # If redis is enabled, it can be used for:

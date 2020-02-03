@@ -157,6 +157,7 @@ MAIL_DEFAULT_SENDER = ("{{ mail_sender_name }}", "{{ mail_sender_address }}")
 # Where to logger should send the emails to
 ADMINS = ["{{ mail_admin_address }}"]
 
+NOTIFICATION_COUNTDOWN = 60
 
 # Logging Settings
 # ------------------------------

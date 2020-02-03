@@ -41,6 +41,7 @@ from flaskbb.utils.settings import flaskbb_config
 
 from .locals import current_category, current_forum, current_topic
 from .utils import force_login_if_needed
+from ..email import notify_users_about_new_messages
 
 impl = HookimplMarker("flaskbb")
 
@@ -233,6 +234,7 @@ class ViewTopic(MethodView):
 
         elif form.validate_on_submit():
             post = form.save(real(current_user), topic)
+            notify_users_about_new_messages()
             return redirect(url_for("forum.view_post", post_id=post.id))
 
         else:
