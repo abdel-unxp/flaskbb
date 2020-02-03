@@ -9,8 +9,8 @@
     :license: BSD, see LICENSE for more details.
 """
 import logging
+import smtplib
 from flask import render_template
-from flask_mail import Message
 from flask_babelplus import lazy_gettext as _
 
 from flaskbb.extensions import mail, celery
@@ -83,7 +83,18 @@ def send_email(subject, recipients, text_body, html_body, sender=None):
                    If no sender is given, it will fall back to the one you
                    have configured with ``MAIL_DEFAULT_SENDER``.
     """
-    msg = Message(subject, recipients=recipients, sender=sender)
-    msg.body = text_body
-    msg.html = html_body
-    mail.send(msg)
+    print("sending email from sender", sender)
+    sender=current_app.config["MAIL_DEFAULT_SENDER"]
+
+    msg = 'Subject: {}\n\n{}'.format(subject, text_body)
+    if current_app.config["MAIL_USE_SSL"] == True:
+        smtp_func = smtplib.SMTP_SSL
+    else:
+        smtp_func = smtplib.SMTP
+    print(msg)
+    s = smtp_func(current_app.config["MAIL_SERVER"], current_app.config["MAIL_PORT"])
+    s.ehlo()
+    #s.connect( )
+    s.login(current_app.config["MAIL_USERNAME"],current_app.config["MAIL_PASSWORD"])
+    s.sendmail(sender, recipients, msg)
+    s.close()
